@@ -42,14 +42,82 @@ const projects = [
  {title:'Branching from the In-Between', year:'Studio II', pages:[30,31,32], cover:30, desc:'A system of coexistence emerging from residual infrastructural space, branching from a central plaza into collective life.'}
 ];
 let currentProject = 0, currentPage = 0;
-function img(n){return `page_${String(n).padStart(2,'0')}.jpg`}
+
+// Main image naming format. This matches files named page1.jpg, page2.jpg ... page32.jpg.
+// The fallback also supports page_01.jpg and pages/page_01.jpg, so the site stays robust.
+function img(n){return `page${n}.jpg`}
+function fallbackImg(n){return `page_${String(n).padStart(2,'0')}.jpg`}
+function folderFallbackImg(n){return `pages/page_${String(n).padStart(2,'0')}.jpg`}
+
+function setImageWithFallback(image, n, altText){
+  image.onerror = () => {
+    image.onerror = () => {
+      image.onerror = null;
+      image.src = folderFallbackImg(n);
+    };
+    image.src = fallbackImg(n);
+  };
+  image.src = img(n);
+  image.alt = altText;
+}
+
+// Preload the portfolio pages for faster, smoother navigation.
+projects.flatMap(p => p.pages).forEach(n => {
+  const preloaded = new Image();
+  preloaded.src = img(n);
+});
+
 const grid = document.getElementById('grid');
-projects.forEach((p,i)=>{const card=document.createElement('button');card.className='card';card.onclick=()=>openProject(i);card.innerHTML=`<div><div class='cardTop'><span>${String(i+1).padStart(2,'0')}</span><span>${p.year}</span></div><img class='thumb' src='${img(p.cover)}' alt='${p.title}'></div><div><h2>${p.title}</h2><p>${p.desc}</p><div class='openHint'>Open project →</div></div>`;grid.appendChild(card)});
-function openProject(i){currentProject=i;currentPage=0;document.getElementById('home').classList.add('hidden');document.getElementById('viewer').classList.add('active');renderPage()}
-function goHome(){document.getElementById('viewer').classList.remove('active');document.getElementById('home').classList.remove('hidden')}
-function renderPage(){const p=projects[currentProject];const page=p.pages[currentPage];const image=document.getElementById('pageImg');image.classList.add('switching');setTimeout(()=>{image.src=img(page);image.alt=`${p.title}, page ${currentPage+1}`;image.classList.remove('switching')},120);document.getElementById('projectTitle').textContent=p.title;document.getElementById('projectDesc').textContent=p.desc;document.getElementById('counter').textContent=`Page ${currentPage+1} / ${p.pages.length}`;document.getElementById('prev').disabled=currentPage===0;document.getElementById('next').disabled=currentPage===p.pages.length-1;document.getElementById('dots').innerHTML=p.pages.map((_,idx)=>`<span class='dot ${idx===currentPage?'active':''}'></span>`).join('')}
-function move(d){const p=projects[currentProject];currentPage=Math.max(0,Math.min(p.pages.length-1,currentPage+d));renderPage()}
-document.addEventListener('keydown',e=>{if(!document.getElementById('viewer').classList.contains('active'))return;if(e.key==='ArrowRight')move(1);if(e.key==='ArrowLeft')move(-1);if(e.key==='Escape')goHome()});
+projects.forEach((p,i)=>{
+  const card=document.createElement('button');
+  card.className='card';
+  card.onclick=()=>openProject(i);
+  card.innerHTML=`<div><div class='cardTop'><span>${String(i+1).padStart(2,'0')}</span><span>${p.year}</span></div><img class='thumb' alt='${p.title}'></div><div><h2>${p.title}</h2><p>${p.desc}</p><div class='openHint'>Open project →</div></div>`;
+  grid.appendChild(card);
+  const thumb = card.querySelector('.thumb');
+  setImageWithFallback(thumb, p.cover, p.title);
+});
+
+function openProject(i){
+  currentProject=i;
+  currentPage=0;
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('viewer').classList.add('active');
+  renderPage();
+}
+
+function goHome(){
+  document.getElementById('viewer').classList.remove('active');
+  document.getElementById('home').classList.remove('hidden');
+}
+
+function renderPage(){
+  const p = projects[currentProject];
+  const page = p.pages[currentPage];
+  const image = document.getElementById('pageImg');
+
+  setImageWithFallback(image, page, `${p.title}, page ${currentPage+1}`);
+
+  document.getElementById('projectTitle').textContent = p.title;
+  document.getElementById('projectDesc').textContent = p.desc;
+  document.getElementById('counter').textContent = `Page ${currentPage+1} / ${p.pages.length}`;
+  document.getElementById('prev').disabled = currentPage === 0;
+  document.getElementById('next').disabled = currentPage === p.pages.length - 1;
+  document.getElementById('dots').innerHTML = p.pages.map((_,idx)=>`<span class='dot ${idx===currentPage?'active':''}'></span>`).join('');
+}
+
+function move(d){
+  const p=projects[currentProject];
+  currentPage=Math.max(0,Math.min(p.pages.length-1,currentPage+d));
+  renderPage();
+}
+
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('viewer').classList.contains('active'))return;
+  if(e.key==='ArrowRight')move(1);
+  if(e.key==='ArrowLeft')move(-1);
+  if(e.key==='Escape')goHome();
+});
 </script>
 </body>
 </html>
