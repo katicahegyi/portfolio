@@ -598,19 +598,45 @@ function renderPage(){
   const page = p.pages[currentPage];
   const image = document.getElementById('pageImg');
 
-  setImageWithFallback(image, page, `${p.title}, page ${currentPage+1}`);
+  // finom, gyors transition
+  image.classList.add('switching');
+
+  // új kép előre betöltése
+  const preload = new Image();
+
+  preload.onload = () => {
+
+    // csak amikor már kész az új kép:
+    setImageWithFallback(
+      image,
+      page,
+      `${p.title}, page ${currentPage+1}`
+    );
+
+    requestAnimationFrame(()=>{
+      image.classList.remove('switching');
+    });
+  };
+
+  preload.src = img(page);
 
   document.getElementById('projectTitle').textContent = p.title;
   document.getElementById('projectDesc').textContent = p.desc;
-  document.getElementById('counter').textContent = `Page ${currentPage+1} / ${p.pages.length}`;
+  document.getElementById('counter').textContent =
+    `Page ${currentPage+1} / ${p.pages.length}`;
 
-  document.getElementById('prev').disabled = currentPage === 0;
-  document.getElementById('next').disabled = currentPage === p.pages.length - 1;
+  document.getElementById('prev').disabled =
+    currentPage === 0;
+
+  document.getElementById('next').disabled =
+    currentPage === p.pages.length - 1;
 
   document.getElementById('dots').innerHTML =
-    p.pages.map((_,idx)=>`
-      <span class="dot ${idx===currentPage ? 'active' : ''}"></span>
-    `).join('');
+    p.pages.map((_,idx)=>
+      `<span class="dot ${
+        idx===currentPage ? 'active' : ''
+      }"></span>`
+    ).join('');
 }
 
 function move(d){
