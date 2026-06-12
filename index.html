@@ -521,34 +521,59 @@ const projects = [
 let currentProject = 0;
 let currentPage = 0;
 
-function img(n){
-  return `page${n}.jpg`;
-}
-
-function fallbackImg(n){
-  return `page_${String(n).padStart(2,'0')}.jpg`;
-}
-
-function folderFallbackImg(n){
-  return `pages/page_${String(n).padStart(2,'0')}.jpg`;
+function imageSources(n){
+  return [
+    `page${n}.jpg`,
+    `page${n}.jpeg`,
+    `page${n}.png`,
+    `page${n}.webp`,
+    `page_${String(n).padStart(2,'0')}.jpg`,
+    `page_${String(n).padStart(2,'0')}.jpeg`,
+    `page_${String(n).padStart(2,'0')}.png`,
+    `page_${String(n).padStart(2,'0')}.webp`,
+    `pages/page${n}.jpg`,
+    `pages/page${n}.jpeg`,
+    `pages/page${n}.png`,
+    `pages/page${n}.webp`,
+    `pages/page_${String(n).padStart(2,'0')}.jpg`,
+    `pages/page_${String(n).padStart(2,'0')}.jpeg`,
+    `pages/page_${String(n).padStart(2,'0')}.png`,
+    `pages/page_${String(n).padStart(2,'0')}.webp`
+  ];
 }
 
 function setImageWithFallback(image, n, altText){
-  image.onerror = () => {
-    image.onerror = () => {
-      image.onerror = null;
-      image.src = folderFallbackImg(n);
-    };
-    image.src = fallbackImg(n);
+  const sources = imageSources(n);
+  let index = 0;
+
+  image.alt = altText;
+
+  image.onload = () => {
+    image.classList.remove('switching');
   };
 
-  image.src = img(n);
-  image.alt = altText;
+  image.onerror = () => {
+    index += 1;
+
+    if(index < sources.length){
+      image.src = sources[index];
+    }else{
+      image.onerror = null;
+      image.onload = null;
+      image.classList.remove('switching');
+      console.error('Image not found. Tried:', sources);
+    }
+  };
+
+  image.classList.add('switching');
+  image.src = sources[index];
 }
 
 projects.flatMap(p => p.pages).forEach(n => {
-  const preloaded = new Image();
-  preloaded.src = img(n);
+  imageSources(n).slice(0,4).forEach(src => {
+    const preloaded = new Image();
+    preloaded.src = src;
+  });
 });
 
 const grid = document.getElementById('grid');
@@ -603,13 +628,7 @@ function renderPage(){
   const page = p.pages[currentPage];
   const image = document.getElementById('pageImg');
 
-  image.classList.add('switching');
-
   setImageWithFallback(image, page, `${p.title}, page ${currentPage+1}`);
-
-  setTimeout(() => {
-    image.classList.remove('switching');
-  }, 80);
 
   document.getElementById('projectTitle').textContent = p.title;
   document.getElementById('projectDesc').textContent = p.desc;
