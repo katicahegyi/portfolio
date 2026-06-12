@@ -39,10 +39,10 @@ const projects = [
  {title:'Live Music Concert Hall and Street Food at Rákosrendező', year:'2023', pages:[14,15,16,17,18,19], cover:14, desc:'A teamwork proposal for rehabilitating the Rákosrendező delta area through public functions, green recreation and adaptive reuse.'},
  {title:'Multi-Purpose Sports Hall in the Orczy Quarter', year:'2024', pages:[20,21,22,23], cover:20, desc:'A sports and recreational infrastructure proposal supporting the Orczy Quarter with a gymnasium, wellness, climbing, daycare and community facilities.'},
  {title:'Butterfly House in the Mecsek', year:'Thesis', pages:[24,25,26,27,28,29], cover:24, desc:'An eco-tourism public building in Orfű, designed around butterflies, metamorphosis, local biodiversity and lightweight natural materials.'},
- {title:'Branching from the In-Between', year:'Studio II', pages:[30,31,32,33], cover:30, desc:'A system of coexistence emerging from residual infrastructural space, branching from a central plaza into collective life.'}
+ {title:'Branching from the In-Between', year:'Studio II', pages:[30,31,32], cover:30, desc:'A system of coexistence emerging from residual infrastructural space, branching from a central plaza into collective life.'}
 ];
 let currentProject = 0, currentPage = 0;
-function img(n){return `pages/page_${String(n).padStart(2,'0')}.jpg`}
+function img(n){return `page_${String(n).padStart(2,'0')}.jpg`}
 const grid = document.getElementById('grid');
 projects.forEach((p,i)=>{const card=document.createElement('button');card.className='card';card.onclick=()=>openProject(i);card.innerHTML=`<div><div class='cardTop'><span>${String(i+1).padStart(2,'0')}</span><span>${p.year}</span></div><img class='thumb' src='${img(p.cover)}' alt='${p.title}'></div><div><h2>${p.title}</h2><p>${p.desc}</p><div class='openHint'>Open project →</div></div>`;grid.appendChild(card)});
 function openProject(i){currentProject=i;currentPage=0;document.getElementById('home').classList.add('hidden');document.getElementById('viewer').classList.add('active');renderPage()}
