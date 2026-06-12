@@ -605,43 +605,24 @@ function renderPage(){
 
   image.classList.add('switching');
 
-  const preload = new Image();
+  setImageWithFallback(image, page, `${p.title}, page ${currentPage+1}`);
 
-  preload.onload = () => {
-
-    setImageWithFallback(
-      image,
-      page,
-      `${p.title}, page ${currentPage+1}`
-    );
-
-    requestAnimationFrame(()=>{
-      image.classList.remove('switching');
-    });
-  };
-
-  preload.src = img(page);
+  setTimeout(() => {
+    image.classList.remove('switching');
+  }, 80);
 
   document.getElementById('projectTitle').textContent = p.title;
   document.getElementById('projectDesc').textContent = p.desc;
+  document.getElementById('counter').textContent = `Page ${currentPage+1} / ${p.pages.length}`;
 
-  document.getElementById('counter').textContent =
-    `Page ${currentPage+1} / ${p.pages.length}`;
-
-  document.getElementById('prev').disabled =
-    currentPage === 0;
-
-  document.getElementById('next').disabled =
-    currentPage === p.pages.length - 1;
+  document.getElementById('prev').disabled = currentPage === 0;
+  document.getElementById('next').disabled = currentPage === p.pages.length - 1;
 
   document.getElementById('dots').innerHTML =
     p.pages.map((_,idx)=>
-      `<span class="dot ${
-        idx===currentPage ? 'active' : ''
-      }"></span>`
+      `<span class="dot ${idx===currentPage ? 'active' : ''}"></span>`
     ).join('');
 }
-
 function move(d){
   const p = projects[currentProject];
 
