@@ -603,15 +603,12 @@ function renderPage(){
   const page = p.pages[currentPage];
   const image = document.getElementById('pageImg');
 
-  // finom, gyors transition
   image.classList.add('switching');
 
-  // új kép előre betöltése
   const preload = new Image();
 
   preload.onload = () => {
 
-    // csak amikor már kész az új kép:
     setImageWithFallback(
       image,
       page,
@@ -627,6 +624,7 @@ function renderPage(){
 
   document.getElementById('projectTitle').textContent = p.title;
   document.getElementById('projectDesc').textContent = p.desc;
+
   document.getElementById('counter').textContent =
     `Page ${currentPage+1} / ${p.pages.length}`;
 
