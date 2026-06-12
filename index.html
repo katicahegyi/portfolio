@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Katica Hegyi — Interactive Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#d8d8d6; --paper:#eeeeec; --ink:#171717; --muted:#6f6f6b; --line:rgba(0,0,0,.16); --soft:rgba(255,255,255,.42);
+    }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:'Montserrat', Arial, sans-serif;letter-spacing:.02em;overflow:hidden}
+    button{font:inherit;color:inherit;background:none;border:0;cursor:pointer} .app{height:100vh;width:100vw;position:relative}
+    .home{height:100%;overflow-y:auto;padding:42px clamp(22px,4vw,70px) 70px;transition:opacity .45s ease,transform .45s ease}.home.hidden{opacity:0;transform:scale(.985);pointer-events:none;position:absolute;inset:0}
+    header{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;margin-bottom:34px}.brand h1{font-size:clamp(28px,5vw,70px);line-height:.9;margin:0;font-weight:500;letter-spacing:.18em;text-transform:uppercase}.brand p{margin:15px 0 0;color:var(--muted);max-width:520px;font-size:14px;line-height:1.5}.meta{font-size:12px;text-transform:uppercase;color:var(--muted);text-align:right;line-height:1.7;white-space:nowrap}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}.card{width:100%;min-height:420px;background:var(--paper);border:1px solid var(--line);position:relative;overflow:hidden;padding:18px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .35s ease, box-shadow .35s ease, filter .35s ease}.card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.15);filter:contrast(1.03)}
+    .thumb{height:310px;width:100%;object-fit:cover;filter:grayscale(1);opacity:.86;transition:filter .35s ease, opacity .35s ease, transform .55s ease}.card:hover .thumb{filter:grayscale(.35);opacity:1;transform:scale(1.025)}.cardTop{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;text-transform:uppercase}.card h2{font-weight:520;font-size:clamp(18px,2vw,30px);line-height:1.02;margin:18px 0 8px;text-transform:uppercase;letter-spacing:.06em}.card p{font-size:12px;line-height:1.45;color:var(--muted);margin:0;max-width:90%}.openHint{margin-top:14px;font-size:11px;text-transform:uppercase;border-top:1px solid var(--line);padding-top:12px;color:var(--ink)}
+    .viewer{position:absolute;inset:0;background:var(--bg);display:none;opacity:0;transition:opacity .35s ease}.viewer.active{display:block;opacity:1}.stage{height:100%;display:grid;grid-template-columns:280px 1fr;gap:0}.side{border-right:1px solid var(--line);padding:28px;display:flex;flex-direction:column;justify-content:space-between;background:rgba(238,238,236,.45);backdrop-filter:blur(12px)}.side h3{margin:0;font-size:22px;line-height:1.05;text-transform:uppercase;letter-spacing:.08em;font-weight:520}.side p{font-size:12px;line-height:1.5;color:var(--muted);margin:18px 0}.counter{font-size:12px;color:var(--muted);text-transform:uppercase}.back{align-self:flex-start;border:1px solid var(--line);padding:10px 14px;border-radius:999px;font-size:12px;text-transform:uppercase;background:var(--soft)}
+    .canvas{position:relative;display:flex;align-items:center;justify-content:center;padding:42px 92px}.pageImg{max-width:100%;max-height:92vh;object-fit:contain;box-shadow:0 25px 80px rgba(0,0,0,.18);background:white;transition:opacity .22s ease,transform .22s ease}.pageImg.switching{opacity:0;transform:scale(.985)}.nav{position:absolute;top:50%;transform:translateY(-50%);width:54px;height:54px;border:1px solid var(--line);border-radius:50%;background:rgba(238,238,236,.66);backdrop-filter:blur(10px);font-size:30px;display:flex;align-items:center;justify-content:center}.prev{left:28px}.next{right:28px}.nav:disabled{opacity:.22;cursor:not-allowed}.bar{height:1px;background:var(--line);margin:18px 0}.dots{display:flex;gap:7px;flex-wrap:wrap}.dot{width:7px;height:7px;border-radius:50%;background:rgba(0,0,0,.22)}.dot.active{background:var(--ink)}
+    @media(max-width:1200px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:900px){body{overflow:auto}.home{overflow:visible}.grid{grid-template-columns:1fr}.card{min-height:auto}.stage{grid-template-columns:1fr}.side{position:absolute;z-index:3;left:14px;right:14px;top:14px;border:1px solid var(--line);border-radius:18px;padding:16px;background:rgba(238,238,236,.86)}.side h3,.side p{display:none}.canvas{height:100vh;padding:120px 20px 70px}.nav{bottom:16px;top:auto;transform:none}.prev{left:calc(50% - 66px)}.next{right:calc(50% - 66px)}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <main class="home" id="home">
+    <header><div class="brand"><h1>Katica Hegyi</h1></div><div class="meta">portfolio<br>architecture<br>selected works</div></header>
+    <section class="grid" id="grid"></section>
+  </main>
+  <section class="viewer" id="viewer" aria-live="polite">
+    <div class="stage"><aside class="side"><div><button class="back" onclick="goHome()">← Start page</button><div class="bar"></div><h3 id="projectTitle"></h3><p id="projectDesc"></p></div><div><div class="counter" id="counter"></div><div class="bar"></div><div class="dots" id="dots"></div></div></aside><div class="canvas"><button class="nav prev" id="prev" onclick="move(-1)">‹</button><img class="pageImg" id="pageImg" alt="Portfolio page"><button class="nav next" id="next" onclick="move(1)">›</button></div></div>
+  </section>
+</div>
+<script>
+const projects = [
+ {title:'Shelter in Paraguay', year:'2022–23', pages:[4,5,6,7], cover:4, desc:'A small-scale shelter designed for a fictional ceramist client, responding to Paraguay’s climate through local materials, shade, mass and thermal comfort.'},
+ {title:'Pigeon Meat Processing Manufactory', year:'2022–23', pages:[8,9,10,11,12,13], cover:8, desc:'An industrial building complex in Csepel-Háros, Budapest, organized around the operational sequence of breeding, processing and distribution.'},
+ {title:'Live Music Concert Hall and Street Food at Rákosrendező', year:'2023', pages:[14,15,16,17,18,19], cover:14, desc:'A teamwork proposal for rehabilitating the Rákosrendező delta area through public functions, green recreation and adaptive reuse.'},
+ {title:'Multi-Purpose Sports Hall in the Orczy Quarter', year:'2024', pages:[20,21,22,23], cover:20, desc:'A sports and recreational infrastructure proposal supporting the Orczy Quarter with a gymnasium, wellness, climbing, daycare and community facilities.'},
+ {title:'Butterfly House in the Mecsek', year:'Thesis', pages:[24,25,26,27,28,29], cover:24, desc:'An eco-tourism public building in Orfű, designed around butterflies, metamorphosis, local biodiversity and lightweight natural materials.'},
+ {title:'Branching from the In-Between', year:'Studio II', pages:[30,31,32,33], cover:30, desc:'A system of coexistence emerging from residual infrastructural space, branching from a central plaza into collective life.'}
+];
+let currentProject = 0, currentPage = 0;
+function img(n){return `pages/page_${String(n).padStart(2,'0')}.jpg`}
+const grid = document.getElementById('grid');
+projects.forEach((p,i)=>{const card=document.createElement('button');card.className='card';card.onclick=()=>openProject(i);card.innerHTML=`<div><div class='cardTop'><span>${String(i+1).padStart(2,'0')}</span><span>${p.year}</span></div><img class='thumb' src='${img(p.cover)}' alt='${p.title}'></div><div><h2>${p.title}</h2><p>${p.desc}</p><div class='openHint'>Open project →</div></div>`;grid.appendChild(card)});
+function openProject(i){currentProject=i;currentPage=0;document.getElementById('home').classList.add('hidden');document.getElementById('viewer').classList.add('active');renderPage()}
+function goHome(){document.getElementById('viewer').classList.remove('active');document.getElementById('home').classList.remove('hidden')}
+function renderPage(){const p=projects[currentProject];const page=p.pages[currentPage];const image=document.getElementById('pageImg');image.classList.add('switching');setTimeout(()=>{image.src=img(page);image.alt=`${p.title}, page ${currentPage+1}`;image.classList.remove('switching')},120);document.getElementById('projectTitle').textContent=p.title;document.getElementById('projectDesc').textContent=p.desc;document.getElementById('counter').textContent=`Page ${currentPage+1} / ${p.pages.length}`;document.getElementById('prev').disabled=currentPage===0;document.getElementById('next').disabled=currentPage===p.pages.length-1;document.getElementById('dots').innerHTML=p.pages.map((_,idx)=>`<span class='dot ${idx===currentPage?'active':''}'></span>`).join('')}
+function move(d){const p=projects[currentProject];currentPage=Math.max(0,Math.min(p.pages.length-1,currentPage+d));renderPage()}
+document.addEventListener('keydown',e=>{if(!document.getElementById('viewer').classList.contains('active'))return;if(e.key==='ArrowRight')move(1);if(e.key==='ArrowLeft')move(-1);if(e.key==='Escape')goHome()});
+</script>
+</body>
+</html>
