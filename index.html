@@ -3,425 +3,347 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Katica Hegyi — Interactive Portfolio</title>
+  <title>Katica Hegyi — Architecture Portfolio</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#d8d8d6;
-      --paper:#eeeeec;
-      --ink:#171717;
-      --muted:#6f6f6b;
-      --line:rgba(0,0,0,.16);
-      --soft:rgba(255,255,255,.42);
+      --bg:#cfcdc8;        /* neutral concrete ground */
+      --sheet:#e0e0e0;     /* matches the printed sheet background */
+      --ink:#1a1a17;       /* near-black */
+      --muted:#6c6a64;     /* secondary text */
+      --faint:#9b9890;     /* tertiary / data */
+      --line:rgba(20,20,16,.14);
+      --line-strong:rgba(20,20,16,.30);
+      --glass:rgba(224,224,224,.74);
+
+      --ease:cubic-bezier(.22,.61,.36,1);
+      --pad:clamp(22px,4.2vw,72px);
     }
 
     *{box-sizing:border-box}
+    html,body{height:100%}
 
     body{
       margin:0;
       background:var(--bg);
       color:var(--ink);
-      font-family:'Montserrat', Arial, sans-serif;
-      letter-spacing:.02em;
+      font-family:'Montserrat', system-ui, sans-serif;
+      font-optical-sizing:auto;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
       overflow:hidden;
     }
 
     button{
-      font:inherit;
+      font-family:inherit;
       color:inherit;
       background:none;
       border:0;
       cursor:pointer;
+      letter-spacing:inherit;
     }
 
-    .app{
-      height:100vh;
-      width:100vw;
-      position:relative;
-    }
+    :focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
+
+    .app{ height:100vh; width:100vw; position:relative; }
+
+    /* ───────────────────────── HOME ───────────────────────── */
 
     .home{
       height:100%;
       overflow-y:auto;
-      padding:42px clamp(22px,4vw,70px) 70px;
-      transition:opacity .45s ease,transform .45s ease;
+      padding:clamp(34px,5vw,64px) var(--pad) 0;
+      transition:opacity .5s var(--ease), transform .5s var(--ease);
     }
-
     .home.hidden{
-      opacity:0;
-      transform:scale(.985);
-      pointer-events:none;
-      position:absolute;
-      inset:0;
+      opacity:0; transform:scale(.99);
+      pointer-events:none; position:absolute; inset:0;
     }
 
-    header{
+    .masthead{
       display:flex;
       justify-content:space-between;
-      align-items:flex-start;
-      gap:30px;
-      margin-bottom:34px;
+      align-items:flex-end;
+      gap:40px;
+      padding-bottom:22px;
+      border-bottom:1px solid var(--line-strong);
     }
-
-    .brand h1{
-      font-size:clamp(28px,5vw,70px);
-      line-height:.9;
+    .masthead h1{
       margin:0;
-      font-weight:500;
-      letter-spacing:.18em;
+      font-weight:300;
+      font-size:clamp(30px,6vw,76px);
+      line-height:.92;
+      letter-spacing:.14em;
       text-transform:uppercase;
     }
-
-    .meta{
-      font-size:12px;
+    .masthead .role{
+      display:block;
+      margin-top:14px;
+      font-size:clamp(10px,1vw,12px);
+      font-weight:500;
+      letter-spacing:.3em;
       text-transform:uppercase;
       color:var(--muted);
-      text-align:right;
-      line-height:1.7;
-      white-space:nowrap;
     }
+    .index-tag{
+      flex-shrink:0;
+      text-align:right;
+      font-size:11px;
+      font-weight:500;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--faint);
+      line-height:1.9;
+    }
+    .index-tag b{ font-weight:600; color:var(--ink); }
+
+    .lead{
+      max-width:48ch;
+      margin:26px 0 42px;
+      font-size:clamp(13px,1.3vw,15px);
+      line-height:1.6;
+      color:var(--muted);
+    }
+
+    /* ───────────────────────── GRID ───────────────────────── */
 
     .grid{
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:18px;
-      align-items:stretch;
+      gap:clamp(20px,2.6vw,38px);
+      padding-bottom:clamp(40px,6vw,80px);
     }
 
     .card{
       width:100%;
-      min-height:520px;
-      background:var(--paper);
-      border:1px solid var(--line);
-      position:relative;
-      overflow:hidden;
-      padding:18px;
+      text-align:left;
       display:flex;
       flex-direction:column;
-      justify-content:space-between;
-      transition:transform .35s ease, box-shadow .35s ease, filter .35s ease;
+      opacity:0;
+      transform:translateY(14px);
+      animation:rise .7s var(--ease) forwards;
     }
+    @keyframes rise{ to{ opacity:1; transform:none; } }
 
-    .card:hover{
-      transform:translateY(-6px);
-      box-shadow:0 24px 60px rgba(0,0,0,.15);
-      filter:contrast(1.03);
-    }
-
-    .cardTop{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
-
-    /* JAVÍTVA: a kezdőlapi projektkép teljes oldalként jelenik meg, nincs levágás */
-    .thumbWrap{
-      width:100%;
-      height:330px;
-      background:#e5e5e3;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
+    .frame{
+      position:relative;
+      aspect-ratio:2382/1684;   /* exact sheet ratio — no letterboxing */
+      background:var(--sheet);
+      border:1px solid var(--line);
       overflow:hidden;
+      transition:border-color .4s var(--ease), box-shadow .4s var(--ease);
     }
-
     .thumb{
-      width:100%;
-      height:100%;
+      width:100%; height:100%;
       object-fit:contain;
-      object-position:center top;
-      filter:grayscale(1);
-      opacity:.86;
-      transition:filter .35s ease, opacity .35s ease, transform .55s ease;
+      filter:grayscale(1) contrast(.98);
+      opacity:.92;
+      transition:filter .5s var(--ease), opacity .5s var(--ease), transform .7s var(--ease);
     }
-
-   .card:hover .thumb{
-  filter:grayscale(0);
-  opacity:1;
-  transform:scale(1.01);
-}
-
-    .card h2{
-      font-weight:520;
-      font-size:clamp(18px,2vw,30px);
-      line-height:1.02;
-      margin:22px 0 8px;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-    }
-
-    .card p{
-      font-size:12px;
-      line-height:1.45;
-      color:var(--muted);
-      margin:0 auto;
-      max-width:90%;
-    }
-
-    .openHint{
-      margin-top:14px;
-      font-size:11px;
-      text-transform:uppercase;
-      border-top:1px solid var(--line);
-      padding-top:12px;
+    .frame::after{
+      content:"View";
+      position:absolute;
+      left:14px; bottom:12px;
+      font-size:10px; font-weight:600;
+      letter-spacing:.22em; text-transform:uppercase;
       color:var(--ink);
+      opacity:0; transform:translateY(6px);
+      transition:opacity .4s var(--ease), transform .4s var(--ease);
     }
+    .card:hover .frame, .card:focus-visible .frame{
+      border-color:var(--line-strong);
+      box-shadow:0 26px 60px rgba(0,0,0,.16);
+    }
+    .card:hover .thumb, .card:focus-visible .thumb{
+      filter:grayscale(0) contrast(1);
+      opacity:1; transform:scale(1.012);
+    }
+    .card:hover .frame::after, .card:focus-visible .frame::after{
+      opacity:1; transform:none;
+    }
+
+    .card-meta{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:13px;
+      font-size:10.5px;
+      font-weight:500;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--faint);
+    }
+    .card-meta b{ font-weight:600; color:var(--ink); }
+
+    /* ───────────────────────── FOOTER ───────────────────────── */
+
+    .colophon{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap:24px; flex-wrap:wrap;
+      padding:22px 0 40px;
+      border-top:1px solid var(--line);
+      font-size:11px;
+      font-weight:500;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--faint);
+    }
+    .colophon a{ color:var(--ink); text-decoration:none; }
+    .colophon a:hover{ text-decoration:underline; text-underline-offset:3px; }
+
+    /* ───────────────────────── VIEWER ───────────────────────── */
 
     .viewer{
-      position:absolute;
-      inset:0;
+      position:absolute; inset:0;
       background:var(--bg);
-      display:none;
-      opacity:0;
-      transition:opacity .35s ease;
+      display:none; opacity:0;
+      transition:opacity .4s var(--ease);
     }
-
-    .viewer.active{
-      display:block;
-      opacity:1;
-    }
+    .viewer.active{ display:block; opacity:1; }
 
     .stage{
       height:100%;
       display:grid;
-      grid-template-columns:280px 1fr;
-      gap:0;
+      grid-template-columns:clamp(260px,24vw,320px) 1fr;
     }
 
     .side{
-      border-right:1px solid var(--line);
-      padding:28px;
-      display:flex;
-      flex-direction:column;
+      border-right:1px solid var(--line-strong);
+      padding:clamp(26px,3vw,40px);
+      display:flex; flex-direction:column;
       justify-content:space-between;
-      background:rgba(238,238,236,.45);
-      backdrop-filter:blur(12px);
+      background:var(--glass);
+      backdrop-filter:blur(14px);
     }
-
-    .side h3{
-      margin:0;
-      font-size:22px;
-      line-height:1.05;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      font-weight:520;
-    }
-
-    .side p{
-      font-size:12px;
-      line-height:1.5;
-      color:var(--muted);
-      margin:18px 0;
-    }
-
-    .counter{
-      font-size:12px;
-      color:var(--muted);
-      text-transform:uppercase;
-    }
-
     .back{
       align-self:flex-start;
-      border:1px solid var(--line);
-      padding:10px 14px;
+      padding:9px 16px 9px 12px;
+      border:1px solid var(--line-strong);
       border-radius:999px;
-      font-size:12px;
-      text-transform:uppercase;
-      background:var(--soft);
+      font-size:11px; font-weight:500;
+      letter-spacing:.16em; text-transform:uppercase;
+      transition:background .3s var(--ease);
     }
+    .back:hover{ background:rgba(0,0,0,.05); }
+
+    .side .num{
+      margin-top:34px;
+      font-size:11px; font-weight:600;
+      letter-spacing:.24em; color:var(--faint);
+    }
+    .side h3{
+      margin:10px 0 0;
+      font-weight:500;
+      font-size:clamp(18px,2vw,23px);
+      line-height:1.14;
+      letter-spacing:.01em;
+    }
+    .side .yr{
+      margin-top:9px;
+      font-size:11px; font-weight:500;
+      letter-spacing:.2em; text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .side-foot{ display:flex; flex-direction:column; gap:16px; }
+    .counter{
+      font-size:11px; font-weight:500;
+      letter-spacing:.2em; text-transform:uppercase;
+      color:var(--muted);
+    }
+    .progress{ height:1px; background:var(--line-strong); position:relative; }
+    .progress span{
+      position:absolute; left:0; top:0; bottom:0;
+      background:var(--ink);
+      transition:width .35s var(--ease);
+    }
+    .proj-nav{
+      display:flex; justify-content:space-between; gap:12px;
+      font-size:10.5px; font-weight:500;
+      letter-spacing:.16em; text-transform:uppercase;
+    }
+    .proj-nav button{ color:var(--muted); transition:color .3s var(--ease); }
+    .proj-nav button:hover:not(:disabled){ color:var(--ink); }
+    .proj-nav button:disabled{ opacity:.3; cursor:default; }
 
     .canvas{
       position:relative;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:42px 92px;
+      display:flex; align-items:center; justify-content:center;
+      padding:clamp(28px,4vw,56px) clamp(60px,7vw,104px);
     }
-
     .pageImg{
-  max-width:100%;
-  max-height:92vh;
-  object-fit:contain;
-  box-shadow:0 25px 80px rgba(0,0,0,.18);
-  background:white;
-
-  transition:
-    opacity .12s ease-out,
-    transform .16s ease-out;
-
-  will-change: opacity, transform;
-}
-
-.pageImg.switching{
-  opacity:.92;
-  transform:scale(.997);
-}
+      max-width:100%; max-height:90vh;
+      object-fit:contain;
+      background:#fff;
+      box-shadow:0 30px 90px rgba(0,0,0,.2);
+      cursor:pointer;
+      transition:opacity .22s var(--ease), transform .26s var(--ease);
+      will-change:opacity,transform;
+    }
+    .pageImg.switching{ opacity:0; transform:scale(.992); }
 
     .nav{
-      position:absolute;
-      top:50%;
+      position:absolute; top:50%;
       transform:translateY(-50%);
-      width:54px;
-      height:54px;
-      border:1px solid var(--line);
+      width:50px; height:50px;
+      border:1px solid var(--line-strong);
       border-radius:50%;
-      background:rgba(238,238,236,.66);
+      background:var(--glass);
       backdrop-filter:blur(10px);
-      font-size:30px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      font-size:24px; line-height:1;
+      display:flex; align-items:center; justify-content:center;
+      transition:background .3s var(--ease), opacity .3s var(--ease);
     }
+    .nav:hover:not(:disabled){ background:rgba(0,0,0,.06); }
+    .prev{ left:clamp(16px,2vw,30px); }
+    .next{ right:clamp(16px,2vw,30px); }
+    .nav:disabled{ opacity:.2; cursor:default; }
 
-    .prev{left:28px}
-    .next{right:28px}
+    /* ───────────────────────── RESPONSIVE ───────────────────────── */
 
-    .nav:disabled{
-      opacity:.22;
-      cursor:not-allowed;
-    }
+    @media(max-width:1100px){ .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
 
-    .bar{
-      height:1px;
-      background:var(--line);
-      margin:18px 0;
-    }
+    @media(max-width:760px){
+      body{ overflow:auto; }
+      .app{ height:auto; }
+      .home{ height:auto; overflow:visible; padding:30px 18px 0; }
+      .home.hidden{ position:fixed; }
+      .masthead{ align-items:flex-start; gap:16px; }
+      .masthead h1{ font-size:38px; letter-spacing:.08em; }
+      .index-tag{ font-size:10px; line-height:1.7; }
+      .grid{ grid-template-columns:1fr; gap:26px; }
+      .frame::after{ opacity:1; transform:none; }
+      .thumb{ filter:grayscale(0); opacity:1; }
 
-    .dots{
-      display:flex;
-      gap:7px;
-      flex-wrap:wrap;
-    }
-
-    .dot{
-      width:7px;
-      height:7px;
-      border-radius:50%;
-      background:rgba(0,0,0,.22);
-    }
-
-    .dot.active{
-      background:var(--ink);
-    }
-
-    @media(max-width:1200px){
-      .grid{
-        grid-template-columns:repeat(2,minmax(0,1fr));
+      .stage{ grid-template-columns:1fr; }
+      .side{
+        position:absolute; z-index:3;
+        top:14px; left:14px; right:14px;
+        border:1px solid var(--line-strong);
+        border-radius:16px; padding:14px 16px;
+        flex-direction:row; align-items:center; justify-content:space-between;
       }
+      .side .num,.side h3,.side .yr{ display:none; }
+      .side-foot{ flex-direction:row; align-items:center; gap:14px; }
+      .progress{ display:none; }
+      .proj-nav{ display:none; }
+      .canvas{ height:100vh; padding:96px 14px 96px; }
+      .pageImg{ max-height:80vh; }
+      .nav{ top:auto; bottom:18px; transform:none; }
+      .prev{ left:calc(50% - 64px); }
+      .next{ right:calc(50% - 64px); }
     }
 
-    @media(max-width:900px){
-
-  body{
-    overflow:auto;
-  }
-
-  .home{
-    overflow:visible;
-    padding:28px 16px 50px;
-  }
-
-  header{
-    margin-bottom:24px;
-  }
-
-  .brand h1{
-    font-size:34px;
-    letter-spacing:.12em;
-  }
-
-  .meta{
-    font-size:10px;
-  }
-
-  .grid{
-    grid-template-columns:1fr;
-    gap:18px;
-  }
-
-  .card{
-    min-height:auto;
-    padding:14px;
-  }
-
-  /* EZ JAVÍTJA A TÚL NAGY KERETET */
-  .thumbWrap{
-    height:auto;
-    background:transparent;
-    display:block;
-    overflow:visible;
-  }
-
-  .thumb{
-    width:100%;
-    height:auto;
-    display:block;
-    object-fit:contain;
-    object-position:center top;
-  }
-
-  .card h2{
-    font-size:22px;
-    margin:18px 0 8px;
-  }
-
-  .card p{
-    max-width:100%;
-  }
-
-  .stage{
-    grid-template-columns:1fr;
-  }
-
-  .side{
-    position:absolute;
-    z-index:3;
-    left:14px;
-    right:14px;
-    top:14px;
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:16px;
-    background:rgba(238,238,236,.86);
-  }
-
-  .side h3,
-  .side p{
-    display:none;
-  }
-
-  .canvas{
-    height:100vh;
-    padding:110px 14px 72px;
-  }
-
-  .pageImg{
-    max-width:100%;
-    max-height:82vh;
-  }
-
-  .nav{
-    bottom:16px;
-    top:auto;
-    transform:none;
-  }
-
-  .prev{
-    left:calc(50% - 66px);
-  }
-
-  .next{
-    right:calc(50% - 66px);
-  }
-}
+    @media(prefers-reduced-motion:reduce){
+      *{ animation:none !important; transition:none !important; }
+      .card{ opacity:1; transform:none; }
+    }
   </style>
 </head>
 
@@ -429,44 +351,53 @@
 <div class="app">
 
   <main class="home" id="home">
-    <header>
-      <div class="brand">
-        <h1>Katica Hegyi</h1>
+    <div class="masthead">
+      <div>
+        <h1>Katica&nbsp;Hegyi</h1>
+        <span class="role">Architecture · Selected Works</span>
       </div>
-      <div class="meta">
-        portfolio<br>
-        architecture<br>
-        selected works
+      <div class="index-tag">
+        Index<br><b id="count">06</b> Projects<br>2022 — 2024
       </div>
-    </header>
+    </div>
+
+    <p class="lead">
+      A selection of academic and studio projects exploring structure, program
+      and site. Hover to bring a sheet into focus; open one to read it page by page.
+    </p>
 
     <section class="grid" id="grid"></section>
+
+    <footer class="colophon">
+      <span>Katica Hegyi — Portfolio</span>
+      <span>Contact · <a href="mailto:hegyikatica@gmail.com">hegyikatica@gmail.com</a></span>
+    </footer>
   </main>
 
   <section class="viewer" id="viewer" aria-live="polite">
     <div class="stage">
-
       <aside class="side">
         <div>
-          <button class="back" onclick="goHome()">← Start page</button>
-          <div class="bar"></div>
+          <button class="back" onclick="goHome()">← Index</button>
+          <div class="num" id="projectNum"></div>
           <h3 id="projectTitle"></h3>
-          <p id="projectDesc"></p>
+          <div class="yr" id="projectYear"></div>
         </div>
-
-        <div>
+        <div class="side-foot">
           <div class="counter" id="counter"></div>
-          <div class="bar"></div>
-          <div class="dots" id="dots"></div>
+          <div class="progress"><span id="progressBar"></span></div>
+          <div class="proj-nav">
+            <button id="prevProj" onclick="moveProject(-1)">← Prev work</button>
+            <button id="nextProj" onclick="moveProject(1)">Next work →</button>
+          </div>
         </div>
       </aside>
 
       <div class="canvas">
-        <button class="nav prev" id="prev" onclick="move(-1)">‹</button>
-        <img class="pageImg" id="pageImg" alt="Portfolio page">
-        <button class="nav next" id="next" onclick="move(1)">›</button>
+        <button class="nav prev" id="prev" aria-label="Previous page" onclick="move(-1)">‹</button>
+        <img class="pageImg" id="pageImg" alt="Portfolio page" onclick="move(1)">
+        <button class="nav next" id="next" aria-label="Next page" onclick="move(1)">›</button>
       </div>
-
     </div>
   </section>
 
@@ -474,150 +405,69 @@
 
 <script>
 const projects = [
-  {
-    title:'Shelter in Paraguay',
-    year:'2022–23',
-    pages:[4,5,6,7],
-    cover:4,
-    desc:'A small-scale shelter designed for a fictional ceramist client, responding to Paraguay’s climate through local materials, shade, mass and thermal comfort.'
-  },
-  {
-    title:'Pigeon Meat Processing Manufactory',
-    year:'2022–23',
-    pages:[8,9,10,11,12,13],
-    cover:8,
-    desc:'An industrial building complex in Csepel-Háros, Budapest, organized around the operational sequence of breeding, processing and distribution.'
-  },
-  {
-    title:'Live Music Concert Hall and Street Food at Rákosrendező',
-    year:'2023',
-    pages:[14,15,16,17,18,19],
-    cover:14,
-    desc:'A teamwork proposal for rehabilitating the Rákosrendező delta area through public functions, green recreation and adaptive reuse.'
-  },
-  {
-    title:'Multi-Purpose Sports Hall in the Orczy Quarter',
-    year:'2024',
-    pages:[20,21,22,23],
-    cover:20,
-    desc:'A sports and recreational infrastructure proposal supporting the Orczy Quarter with a gymnasium, wellness, climbing, daycare and community facilities.'
-  },
-  {
-    title:'Butterfly House in the Mecsek',
-    year:'Thesis',
-    pages:[24,25,26,27,28,29],
-    cover:24,
-    desc:'An eco-tourism public building in Orfű, designed around butterflies, metamorphosis, local biodiversity and lightweight natural materials.'
-  },
-  {
-    title:'Branching from the In-Between',
-    year:'Studio II',
-    pages:[30,31,32],
-    cover:30,
-    desc:'A system of coexistence emerging from residual infrastructural space, branching from a central plaza into collective life.'
-  }
+  { title:'Shelter in Paraguay', year:'2022–23', pages:[4,5,6,7], cover:4 },
+  { title:'Pigeon Meat Processing Manufactory', year:'2022–23', pages:[8,9,10,11,12,13], cover:8 },
+  { title:'Live Music Concert Hall and Street Food at Rákosrendező', year:'2023', pages:[14,15,16,17,18,19], cover:14 },
+  { title:'Multi-Purpose Sports Hall in the Orczy Quarter', year:'2024', pages:[20,21,22,23], cover:20 },
+  { title:'Butterfly House in the Mecsek', year:'Thesis', pages:[24,25,26,27,28,29], cover:24 },
+  { title:'Branching from the In-Between', year:'Studio II', pages:[30,31,32,33], cover:30 }
 ];
 
-let currentProject = 0;
-let currentPage = 0;
+let currentProject = 0, currentPage = 0;
 
 function imageSources(n){
-  return [
-    `page${n}.jpg`,
-    `page${n}.jpeg`,
-    `page${n}.png`,
-    `page${n}.webp`,
-    `page_${String(n).padStart(2,'0')}.jpg`,
-    `page_${String(n).padStart(2,'0')}.jpeg`,
-    `page_${String(n).padStart(2,'0')}.png`,
-    `page_${String(n).padStart(2,'0')}.webp`,
-    `pages/page${n}.jpg`,
-    `pages/page${n}.jpeg`,
-    `pages/page${n}.png`,
-    `pages/page${n}.webp`,
-    `pages/page_${String(n).padStart(2,'0')}.jpg`,
-    `pages/page_${String(n).padStart(2,'0')}.jpeg`,
-    `pages/page_${String(n).padStart(2,'0')}.png`,
-    `pages/page_${String(n).padStart(2,'0')}.webp`
-  ];
+  const pad = String(n).padStart(2,'0');
+  const exts = ['jpg','jpeg','png','webp'];
+  const out = [];
+  exts.forEach(e => out.push(`pages/page_${pad}.${e}`));
+  exts.forEach(e => out.push(`pages/page${n}.${e}`));
+  exts.forEach(e => out.push(`page_${pad}.${e}`));
+  exts.forEach(e => out.push(`page${n}.${e}`));
+  return out;
 }
 
 function setImageWithFallback(image, n, altText){
   const sources = imageSources(n);
-  let index = 0;
-
+  let i = 0;
   image.alt = altText;
-
-  image.onload = () => {
-    image.classList.remove('switching');
-  };
-
+  image.onload = () => image.classList.remove('switching');
   image.onerror = () => {
-    index += 1;
-
-    if(index < sources.length){
-      image.src = sources[index];
-    }else{
-      image.onerror = null;
-      image.onload = null;
-      image.classList.remove('switching');
-      console.error('Image not found. Tried:', sources);
-    }
+    i += 1;
+    if(i < sources.length){ image.src = sources[i]; }
+    else { image.onerror = image.onload = null; image.classList.remove('switching'); console.error('Image not found. Tried:', sources); }
   };
-
   image.classList.add('switching');
-  image.src = sources[index];
+  image.src = sources[i];
 }
 
+/* preload covers + first pages */
 projects.flatMap(p => p.pages).forEach(n => {
-  imageSources(n).slice(0,4).forEach(src => {
-    const preloaded = new Image();
-    preloaded.src = src;
-  });
+  imageSources(n).slice(0,1).forEach(src => { const im = new Image(); im.src = src; });
 });
 
 const grid = document.getElementById('grid');
+document.getElementById('count').textContent = String(projects.length).padStart(2,'0');
 
 projects.forEach((p,i)=>{
   const card = document.createElement('button');
   card.className = 'card';
+  card.style.animationDelay = (i*70)+'ms';
+  card.setAttribute('aria-label', `Open ${p.title}`);
   card.onclick = () => openProject(i);
-
   card.innerHTML = `
-    <div>
-      <div class="cardTop">
-        <span>${String(i+1).padStart(2,'0')}</span>
-        <span>${p.year}</span>
-      </div>
-
-      <div class="thumbWrap">
-        <img class="thumb" alt="${p.title}">
-      </div>
-    </div>
-
-    <div>
-      <h2>${p.title}</h2>
-      <p>${p.desc}</p>
-      <div class="openHint">Open project →</div>
-    </div>
+    <div class="frame"><img class="thumb" alt="${p.title}"></div>
+    <div class="card-meta"><b>${String(i+1).padStart(2,'0')}</b><span>${p.year}</span></div>
   `;
-
   grid.appendChild(card);
-
-  const thumb = card.querySelector('.thumb');
-  setImageWithFallback(thumb, p.cover, p.title);
+  setImageWithFallback(card.querySelector('.thumb'), p.cover, p.title);
 });
 
 function openProject(i){
-  currentProject = i;
-  currentPage = 0;
-
+  currentProject = i; currentPage = 0;
   document.getElementById('home').classList.add('hidden');
   document.getElementById('viewer').classList.add('active');
-
   renderPage();
 }
-
 function goHome(){
   document.getElementById('viewer').classList.remove('active');
   document.getElementById('home').classList.remove('hidden');
@@ -626,40 +476,47 @@ function goHome(){
 function renderPage(){
   const p = projects[currentProject];
   const page = p.pages[currentPage];
-  const image = document.getElementById('pageImg');
+  setImageWithFallback(document.getElementById('pageImg'), page, `${p.title}, page ${currentPage+1}`);
 
-  setImageWithFallback(image, page, `${p.title}, page ${currentPage+1}`);
-
+  document.getElementById('projectNum').textContent = String(currentProject+1).padStart(2,'0') + ' / ' + String(projects.length).padStart(2,'0');
   document.getElementById('projectTitle').textContent = p.title;
-  document.getElementById('projectDesc').textContent = p.desc;
-  document.getElementById('counter').textContent = `Page ${currentPage+1} / ${p.pages.length}`;
+  document.getElementById('projectYear').textContent = p.year;
+  document.getElementById('counter').textContent = `Page ${currentPage+1} of ${p.pages.length}`;
+  document.getElementById('progressBar').style.width = ((currentPage+1)/p.pages.length*100) + '%';
 
   document.getElementById('prev').disabled = currentPage === 0;
   document.getElementById('next').disabled = currentPage === p.pages.length - 1;
-
-  document.getElementById('dots').innerHTML =
-    p.pages.map((_,idx)=>
-      `<span class="dot ${idx===currentPage ? 'active' : ''}"></span>`
-    ).join('');
+  document.getElementById('prevProj').disabled = currentProject === 0;
+  document.getElementById('nextProj').disabled = currentProject === projects.length - 1;
 }
+
 function move(d){
   const p = projects[currentProject];
-
-  currentPage = Math.max(
-    0,
-    Math.min(p.pages.length - 1, currentPage + d)
-  );
-
+  currentPage = Math.max(0, Math.min(p.pages.length - 1, currentPage + d));
   renderPage();
+}
+function moveProject(d){
+  const next = currentProject + d;
+  if(next < 0 || next >= projects.length) return;
+  currentProject = next; currentPage = 0; renderPage();
 }
 
 document.addEventListener('keydown', e => {
   if(!document.getElementById('viewer').classList.contains('active')) return;
-
   if(e.key === 'ArrowRight') move(1);
   if(e.key === 'ArrowLeft') move(-1);
   if(e.key === 'Escape') goHome();
 });
+
+let touchX = null;
+const canvas = document.querySelector('.canvas');
+canvas.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, {passive:true});
+canvas.addEventListener('touchend', e => {
+  if(touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if(Math.abs(dx) > 45) move(dx < 0 ? 1 : -1);
+  touchX = null;
+}, {passive:true});
 </script>
 
 </body>
