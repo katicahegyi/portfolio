@@ -11,15 +11,14 @@
 
   <style>
     :root{
-      --bg:#cfcdc8;        /* neutral concrete ground */
-      --sheet:#e0e0e0;     /* matches the printed sheet background */
-      --ink:#1a1a17;       /* near-black */
-      --muted:#6c6a64;     /* secondary text */
-      --faint:#9b9890;     /* tertiary / data */
+      --bg:#cfcdc8;
+      --sheet:#e0e0e0;
+      --ink:#1a1a17;
+      --muted:#6c6a64;
+      --faint:#9b9890;
       --line:rgba(20,20,16,.14);
       --line-strong:rgba(20,20,16,.30);
       --glass:rgba(224,224,224,.74);
-
       --ease:cubic-bezier(.22,.61,.36,1);
       --pad:clamp(22px,4.2vw,72px);
     }
@@ -39,23 +38,17 @@
     }
 
     button{
-      font-family:inherit;
-      color:inherit;
-      background:none;
-      border:0;
-      cursor:pointer;
+      font-family:inherit; color:inherit;
+      background:none; border:0; cursor:pointer;
       letter-spacing:inherit;
     }
-
     :focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
 
     .app{ height:100vh; width:100vw; position:relative; }
 
-    /* ───────────────────────── HOME ───────────────────────── */
-
+    /* ───────── HOME ───────── */
     .home{
-      height:100%;
-      overflow-y:auto;
+      height:100%; overflow-y:auto;
       padding:clamp(34px,5vw,64px) var(--pad) 0;
       transition:opacity .5s var(--ease), transform .5s var(--ease);
     }
@@ -65,19 +58,17 @@
     }
 
     .masthead{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
-      gap:40px;
+      display:flex; align-items:flex-end;
       padding-bottom:22px;
+      margin-bottom:clamp(34px,5vw,52px);
       border-bottom:1px solid var(--line-strong);
     }
     .masthead h1{
       margin:0;
-      font-weight:300;
+      font-weight:600;            /* Montserrat SemiBold */
       font-size:clamp(30px,6vw,76px);
       line-height:.92;
-      letter-spacing:.14em;
+      letter-spacing:.1em;
       text-transform:uppercase;
     }
     .masthead .role{
@@ -89,49 +80,25 @@
       text-transform:uppercase;
       color:var(--muted);
     }
-    .index-tag{
-      flex-shrink:0;
-      text-align:right;
-      font-size:11px;
-      font-weight:500;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:var(--faint);
-      line-height:1.9;
-    }
-    .index-tag b{ font-weight:600; color:var(--ink); }
 
-    .lead{
-      max-width:48ch;
-      margin:26px 0 42px;
-      font-size:clamp(13px,1.3vw,15px);
-      line-height:1.6;
-      color:var(--muted);
-    }
-
-    /* ───────────────────────── GRID ───────────────────────── */
-
+    /* ───────── GRID ───────── */
     .grid{
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));
       gap:clamp(20px,2.6vw,38px);
       padding-bottom:clamp(40px,6vw,80px);
     }
-
     .card{
-      width:100%;
-      text-align:left;
-      display:flex;
-      flex-direction:column;
-      opacity:0;
-      transform:translateY(14px);
+      width:100%; text-align:left;
+      display:flex; flex-direction:column;
+      opacity:0; transform:translateY(14px);
       animation:rise .7s var(--ease) forwards;
     }
     @keyframes rise{ to{ opacity:1; transform:none; } }
 
     .frame{
       position:relative;
-      aspect-ratio:2382/1684;   /* exact sheet ratio — no letterboxing */
+      aspect-ratio:2382/1684;
       background:var(--sheet);
       border:1px solid var(--line);
       overflow:hidden;
@@ -146,8 +113,7 @@
     }
     .frame::after{
       content:"View";
-      position:absolute;
-      left:14px; bottom:12px;
+      position:absolute; left:14px; bottom:12px;
       font-size:10px; font-weight:600;
       letter-spacing:.22em; text-transform:uppercase;
       color:var(--ink);
@@ -165,40 +131,29 @@
     .card:hover .frame::after, .card:focus-visible .frame::after{
       opacity:1; transform:none;
     }
-
     .card-meta{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
+      display:flex; justify-content:space-between; gap:12px;
       margin-top:13px;
-      font-size:10.5px;
-      font-weight:500;
-      letter-spacing:.22em;
-      text-transform:uppercase;
+      font-size:10.5px; font-weight:500;
+      letter-spacing:.22em; text-transform:uppercase;
       color:var(--faint);
     }
     .card-meta b{ font-weight:600; color:var(--ink); }
 
-    /* ───────────────────────── FOOTER ───────────────────────── */
-
+    /* ───────── FOOTER ───────── */
     .colophon{
-      display:flex;
-      justify-content:space-between;
-      align-items:baseline;
+      display:flex; justify-content:space-between; align-items:baseline;
       gap:24px; flex-wrap:wrap;
       padding:22px 0 40px;
       border-top:1px solid var(--line);
-      font-size:11px;
-      font-weight:500;
-      letter-spacing:.16em;
-      text-transform:uppercase;
+      font-size:11px; font-weight:500;
+      letter-spacing:.16em; text-transform:uppercase;
       color:var(--faint);
     }
     .colophon a{ color:var(--ink); text-decoration:none; }
     .colophon a:hover{ text-decoration:underline; text-underline-offset:3px; }
 
-    /* ───────────────────────── VIEWER ───────────────────────── */
-
+    /* ───────── VIEWER ───────── */
     .viewer{
       position:absolute; inset:0;
       background:var(--bg);
@@ -212,12 +167,10 @@
       display:grid;
       grid-template-columns:clamp(260px,24vw,320px) 1fr;
     }
-
     .side{
       border-right:1px solid var(--line-strong);
       padding:clamp(26px,3vw,40px);
-      display:flex; flex-direction:column;
-      justify-content:space-between;
+      display:flex; flex-direction:column; justify-content:space-between;
       background:var(--glass);
       backdrop-filter:blur(14px);
     }
@@ -232,42 +185,15 @@
     }
     .back:hover{ background:rgba(0,0,0,.05); }
 
-    .side .num{
-      margin-top:34px;
-      font-size:11px; font-weight:600;
-      letter-spacing:.24em; color:var(--faint);
-    }
-    .side h3{
-      margin:10px 0 0;
-      font-weight:500;
-      font-size:clamp(18px,2vw,23px);
-      line-height:1.14;
-      letter-spacing:.01em;
-    }
-    .side .yr{
-      margin-top:9px;
-      font-size:11px; font-weight:500;
-      letter-spacing:.2em; text-transform:uppercase;
-      color:var(--muted);
-    }
+    .side .num{ margin-top:34px; font-size:11px; font-weight:600; letter-spacing:.24em; color:var(--faint); }
+    .side h3{ margin:10px 0 0; font-weight:500; font-size:clamp(18px,2vw,23px); line-height:1.14; letter-spacing:.01em; }
+    .side .yr{ margin-top:9px; font-size:11px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
 
     .side-foot{ display:flex; flex-direction:column; gap:16px; }
-    .counter{
-      font-size:11px; font-weight:500;
-      letter-spacing:.2em; text-transform:uppercase;
-      color:var(--muted);
-    }
+    .counter{ font-size:11px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
     .progress{ height:1px; background:var(--line-strong); position:relative; }
-    .progress span{
-      position:absolute; left:0; top:0; bottom:0;
-      background:var(--ink);
-      transition:width .35s var(--ease);
-    }
-    .proj-nav{
-      display:flex; justify-content:space-between; gap:12px;
-      font-size:10.5px; font-weight:500;
-      letter-spacing:.16em; text-transform:uppercase;
-    }
+    .progress span{ position:absolute; left:0; top:0; bottom:0; background:var(--ink); transition:width .35s var(--ease); }
+    .proj-nav{ display:flex; justify-content:space-between; gap:12px; font-size:10.5px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; }
     .proj-nav button{ color:var(--muted); transition:color .3s var(--ease); }
     .proj-nav button:hover:not(:disabled){ color:var(--ink); }
     .proj-nav button:disabled{ opacity:.3; cursor:default; }
@@ -275,7 +201,7 @@
     .canvas{
       position:relative;
       display:flex; align-items:center; justify-content:center;
-      padding:clamp(28px,4vw,56px) clamp(60px,7vw,104px);
+      padding:clamp(28px,4vw,56px) clamp(64px,7vw,108px);
     }
     .pageImg{
       max-width:100%; max-height:90vh;
@@ -288,25 +214,23 @@
     }
     .pageImg.switching{ opacity:0; transform:scale(.992); }
 
+    /* plain chevrons — no circle, larger */
     .nav{
       position:absolute; top:50%;
       transform:translateY(-50%);
-      width:50px; height:50px;
-      border:1px solid var(--line-strong);
-      border-radius:50%;
-      background:var(--glass);
-      backdrop-filter:blur(10px);
-      font-size:24px; line-height:1;
+      width:60px; height:80px;
       display:flex; align-items:center; justify-content:center;
-      transition:background .3s var(--ease), opacity .3s var(--ease);
+      font-size:72px; font-weight:300; line-height:0;
+      color:var(--ink);
+      opacity:.5;
+      transition:opacity .25s var(--ease);
     }
-    .nav:hover:not(:disabled){ background:rgba(0,0,0,.06); }
-    .prev{ left:clamp(16px,2vw,30px); }
-    .next{ right:clamp(16px,2vw,30px); }
-    .nav:disabled{ opacity:.2; cursor:default; }
+    .nav:hover:not(:disabled){ opacity:1; }
+    .nav:disabled{ opacity:.15; cursor:default; }
+    .prev{ left:clamp(10px,1.6vw,26px); }
+    .next{ right:clamp(10px,1.6vw,26px); }
 
-    /* ───────────────────────── RESPONSIVE ───────────────────────── */
-
+    /* ───────── RESPONSIVE ───────── */
     @media(max-width:1100px){ .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
 
     @media(max-width:760px){
@@ -314,9 +238,7 @@
       .app{ height:auto; }
       .home{ height:auto; overflow:visible; padding:30px 18px 0; }
       .home.hidden{ position:fixed; }
-      .masthead{ align-items:flex-start; gap:16px; }
-      .masthead h1{ font-size:38px; letter-spacing:.08em; }
-      .index-tag{ font-size:10px; line-height:1.7; }
+      .masthead h1{ font-size:38px; letter-spacing:.06em; }
       .grid{ grid-template-columns:1fr; gap:26px; }
       .frame::after{ opacity:1; transform:none; }
       .thumb{ filter:grayscale(0); opacity:1; }
@@ -333,11 +255,11 @@
       .side-foot{ flex-direction:row; align-items:center; gap:14px; }
       .progress{ display:none; }
       .proj-nav{ display:none; }
-      .canvas{ height:100vh; padding:96px 14px 96px; }
+      .canvas{ height:100vh; padding:96px 8px 84px; }
       .pageImg{ max-height:80vh; }
-      .nav{ top:auto; bottom:18px; transform:none; }
-      .prev{ left:calc(50% - 64px); }
-      .next{ right:calc(50% - 64px); }
+      .nav{ top:auto; bottom:14px; transform:none; height:60px; font-size:60px; opacity:.7; }
+      .prev{ left:calc(50% - 70px); }
+      .next{ right:calc(50% - 70px); }
     }
 
     @media(prefers-reduced-motion:reduce){
@@ -356,15 +278,7 @@
         <h1>Katica&nbsp;Hegyi</h1>
         <span class="role">Architecture · Selected Works</span>
       </div>
-      <div class="index-tag">
-        Index<br><b id="count">06</b> Projects<br>2022 — 2024
-      </div>
     </div>
-
-    <p class="lead">
-      A selection of academic and studio projects exploring structure, program
-      and site. Hover to bring a sheet into focus; open one to read it page by page.
-    </p>
 
     <section class="grid" id="grid"></section>
 
@@ -395,7 +309,7 @@
 
       <div class="canvas">
         <button class="nav prev" id="prev" aria-label="Previous page" onclick="move(-1)">‹</button>
-        <img class="pageImg" id="pageImg" alt="Portfolio page" onclick="move(1)">
+        <img class="pageImg" id="pageImg" alt="Portfolio page" decoding="async" onclick="move(1)">
         <button class="nav next" id="next" aria-label="Next page" onclick="move(1)">›</button>
       </div>
     </div>
@@ -415,7 +329,7 @@ const projects = [
 
 let currentProject = 0, currentPage = 0;
 
-function imageSources(n){
+function pageSources(n){
   const pad = String(n).padStart(2,'0');
   const exts = ['jpg','jpeg','png','webp'];
   const out = [];
@@ -425,9 +339,12 @@ function imageSources(n){
   exts.forEach(e => out.push(`page${n}.${e}`));
   return out;
 }
+function coverSources(n){
+  const pad = String(n).padStart(2,'0');
+  return [`pages/thumbs/page_${pad}.jpg`, ...pageSources(n)]; // small thumb first, full as fallback
+}
 
-function setImageWithFallback(image, n, altText){
-  const sources = imageSources(n);
+function setImageWithFallback(image, sources, altText){
   let i = 0;
   image.alt = altText;
   image.onload = () => image.classList.remove('switching');
@@ -440,14 +357,7 @@ function setImageWithFallback(image, n, altText){
   image.src = sources[i];
 }
 
-/* preload covers + first pages */
-projects.flatMap(p => p.pages).forEach(n => {
-  imageSources(n).slice(0,1).forEach(src => { const im = new Image(); im.src = src; });
-});
-
 const grid = document.getElementById('grid');
-document.getElementById('count').textContent = String(projects.length).padStart(2,'0');
-
 projects.forEach((p,i)=>{
   const card = document.createElement('button');
   card.className = 'card';
@@ -455,12 +365,14 @@ projects.forEach((p,i)=>{
   card.setAttribute('aria-label', `Open ${p.title}`);
   card.onclick = () => openProject(i);
   card.innerHTML = `
-    <div class="frame"><img class="thumb" alt="${p.title}"></div>
+    <div class="frame"><img class="thumb" loading="lazy" decoding="async" alt="${p.title}"></div>
     <div class="card-meta"><b>${String(i+1).padStart(2,'0')}</b><span>${p.year}</span></div>
   `;
   grid.appendChild(card);
-  setImageWithFallback(card.querySelector('.thumb'), p.cover, p.title);
+  setImageWithFallback(card.querySelector('.thumb'), coverSources(p.cover), p.title);
 });
+
+function preloadPage(n){ const im = new Image(); im.src = pageSources(n)[0]; }
 
 function openProject(i){
   currentProject = i; currentPage = 0;
@@ -476,7 +388,7 @@ function goHome(){
 function renderPage(){
   const p = projects[currentProject];
   const page = p.pages[currentPage];
-  setImageWithFallback(document.getElementById('pageImg'), page, `${p.title}, page ${currentPage+1}`);
+  setImageWithFallback(document.getElementById('pageImg'), pageSources(page), `${p.title}, page ${currentPage+1}`);
 
   document.getElementById('projectNum').textContent = String(currentProject+1).padStart(2,'0') + ' / ' + String(projects.length).padStart(2,'0');
   document.getElementById('projectTitle').textContent = p.title;
@@ -488,6 +400,10 @@ function renderPage(){
   document.getElementById('next').disabled = currentPage === p.pages.length - 1;
   document.getElementById('prevProj').disabled = currentProject === 0;
   document.getElementById('nextProj').disabled = currentProject === projects.length - 1;
+
+  // quietly preload the neighbouring pages for snappy paging
+  if(currentPage+1 < p.pages.length) preloadPage(p.pages[currentPage+1]);
+  if(currentPage-1 >= 0) preloadPage(p.pages[currentPage-1]);
 }
 
 function move(d){
