@@ -265,7 +265,7 @@ const grid = document.getElementById('grid');
 const imageCache = new Map();
 
 function pageSrc(n){
-  return `page_${String(n).padStart(2,'0')}.jpg`;
+  return `/portfolio/page_${String(n).padStart(2,'0')}.jpg`;
 }
   
 function preloadPage(n){
