@@ -265,9 +265,9 @@ const grid = document.getElementById('grid');
 const imageCache = new Map();
 
 function pageSrc(n){
-  return `pages/page_${String(n).padStart(2,'0')}.jpg`;
+  return `page_${String(n).padStart(2,'0')}.jpg`;
 }
-
+  
 function preloadPage(n){
   const src = pageSrc(n);
   if(imageCache.has(src)) return imageCache.get(src);
