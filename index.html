@@ -37,13 +37,13 @@
     /* HOME */
     .home{
       height:100%; overflow-y:auto;
-      padding:clamp(34px,5vw,64px) var(--pad) 0;
+      padding:clamp(34px,5vw,64px) var(--pad) clamp(40px,6vw,80px);
       transition:opacity .5s var(--ease), transform .5s var(--ease);
     }
     .home.hidden{ opacity:0; transform:scale(.99); pointer-events:none; position:absolute; inset:0; }
 
     .masthead{
-      display:flex; align-items:flex-end;
+      display:flex; justify-content:space-between; align-items:flex-end;
       padding-bottom:22px; margin-bottom:clamp(34px,5vw,52px);
       border-bottom:1px solid var(--line-strong);
     }
@@ -57,11 +57,16 @@
       font-size:clamp(10px,1vw,12px); font-weight:500;
       letter-spacing:.3em; text-transform:uppercase; color:var(--muted);
     }
+    .eyebrow{
+      flex-shrink:0;
+      font-size:11px; font-weight:600;
+      letter-spacing:.3em; text-transform:uppercase; color:var(--faint);
+    }
 
     /* GRID */
     .grid{
       display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:clamp(20px,2.6vw,38px); padding-bottom:clamp(40px,6vw,80px);
+      gap:clamp(20px,2.6vw,38px);
     }
     .card{
       width:100%; text-align:left; display:flex; flex-direction:column;
@@ -88,15 +93,14 @@
     .card:hover .thumb,.card:focus-visible .thumb{ filter:grayscale(0) contrast(1); opacity:1; transform:scale(1.012); }
     .card:hover .frame::after,.card:focus-visible .frame::after{ opacity:1; transform:none; }
     .card-meta{
-      display:flex; justify-content:space-between; gap:12px; margin-top:13px;
-      font-size:10.5px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--faint);
+      margin-top:13px;
+      font-size:10.5px; font-weight:600; letter-spacing:.22em; color:var(--ink);
     }
-    .card-meta b{ font-weight:600; color:var(--ink); }
 
-    /* FOOTER */
     .colophon{
       display:flex; justify-content:space-between; align-items:baseline; gap:24px; flex-wrap:wrap;
-      padding:22px 0 40px; border-top:1px solid var(--line);
+      margin-top:clamp(40px,6vw,72px);
+      padding:22px 0 8px; border-top:1px solid var(--line);
       font-size:11px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--faint);
     }
     .colophon a{ color:var(--ink); text-decoration:none; }
@@ -109,7 +113,7 @@
     .side{
       border-right:1px solid var(--line-strong); padding:clamp(26px,3vw,40px);
       display:flex; flex-direction:column; justify-content:space-between;
-      background:var(--glass); backdrop-filter:blur(14px);
+      background:var(--glass); backdrop-filter:blur(14px); z-index:4;
     }
     .back{
       align-self:flex-start; padding:9px 16px 9px 12px;
@@ -130,33 +134,44 @@
     .proj-nav button:hover:not(:disabled){ color:var(--ink); }
     .proj-nav button:disabled{ opacity:.3; cursor:default; }
 
-    .canvas{ position:relative; display:flex; align-items:center; justify-content:center; padding:clamp(28px,4vw,56px) clamp(64px,7vw,108px); }
-    .pageImg{
-      max-width:100%; max-height:90vh;
-      aspect-ratio:2382/1684;          /* gives the box a size before the file loads */
-      object-fit:contain;
-      background-color:var(--sheet);
-      background-size:contain; background-position:center; background-repeat:no-repeat;
-      box-shadow:0 30px 90px rgba(0,0,0,.2);
+    /* peek carousel */
+    .canvas{ position:relative; overflow:hidden; }
+    .track{
+      position:absolute; inset:0;
+      display:flex; align-items:center;
+      transition:transform .42s var(--ease);
+      will-change:transform;
+    }
+    .slide{
+      flex:0 0 auto; height:100%;
+      display:flex; align-items:center; justify-content:center;
+      opacity:.4; transition:opacity .42s var(--ease);
+    }
+    .slide.current{ opacity:1; }
+    .slide img{
+      display:block; width:100%;
+      max-height:86vh;
+      aspect-ratio:2382/1684; object-fit:contain;
+      background:var(--sheet) center/contain no-repeat;
+      box-shadow:0 26px 80px rgba(0,0,0,.2);
       cursor:pointer;
-      transition:transform .26s var(--ease);
     }
 
     .nav{
-      position:absolute; top:50%; transform:translateY(-50%);
+      position:absolute; top:50%; transform:translateY(-50%); z-index:3;
       width:60px; height:80px; display:flex; align-items:center; justify-content:center;
       font-size:72px; font-weight:300; line-height:0; color:var(--ink);
       opacity:.5; transition:opacity .25s var(--ease);
     }
     .nav:hover:not(:disabled){ opacity:1; }
     .nav:disabled{ opacity:.15; cursor:default; }
-    .prev{ left:clamp(10px,1.6vw,26px); }
-    .next{ right:clamp(10px,1.6vw,26px); }
+    .prev{ left:clamp(10px,1.4vw,22px); }
+    .next{ right:clamp(10px,1.4vw,22px); }
 
     @media(max-width:1100px){ .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
     @media(max-width:760px){
       body{ overflow:auto; } .app{ height:auto; }
-      .home{ height:auto; overflow:visible; padding:30px 18px 0; }
+      .home{ height:auto; overflow:visible; padding:30px 18px 50px; }
       .home.hidden{ position:fixed; }
       .masthead h1{ font-size:38px; letter-spacing:.06em; }
       .grid{ grid-template-columns:1fr; gap:26px; }
@@ -164,15 +179,15 @@
       .thumb{ filter:grayscale(0); opacity:1; }
       .stage{ grid-template-columns:1fr; }
       .side{
-        position:absolute; z-index:3; top:14px; left:14px; right:14px;
+        position:absolute; z-index:4; top:14px; left:14px; right:14px;
         border:1px solid var(--line-strong); border-radius:16px; padding:14px 16px;
         flex-direction:row; align-items:center; justify-content:space-between;
+        background:rgba(224,224,224,.9);
       }
       .side .num,.side h3,.side .yr{ display:none; }
       .side-foot{ flex-direction:row; align-items:center; gap:14px; }
       .progress{ display:none; } .proj-nav{ display:none; }
-      .canvas{ height:100vh; padding:96px 8px 84px; }
-      .pageImg{ max-height:80vh; }
+      .slide img{ max-height:74vh; }
       .nav{ top:auto; bottom:14px; transform:none; height:60px; font-size:60px; opacity:.7; }
       .prev{ left:calc(50% - 70px); } .next{ right:calc(50% - 70px); }
     }
@@ -189,6 +204,7 @@
         <h1>Katica&nbsp;Hegyi</h1>
         <span class="role">Architecture · Selected Works</span>
       </div>
+      <span class="eyebrow">Index</span>
     </div>
     <section class="grid" id="grid"></section>
     <footer class="colophon">
@@ -215,9 +231,9 @@
           </div>
         </div>
       </aside>
-      <div class="canvas">
+      <div class="canvas" id="canvas">
         <button class="nav prev" id="prev" aria-label="Previous page" onclick="move(-1)">‹</button>
-        <img class="pageImg" id="pageImg" alt="Portfolio page" decoding="async" onclick="move(1)">
+        <div class="track" id="track"></div>
         <button class="nav next" id="next" aria-label="Next page" onclick="move(1)">›</button>
       </div>
     </div>
@@ -240,8 +256,13 @@ const projects = [
 
 let currentProject = 0, currentPage = 0;
 
-function pageSrc(n){ return `pages/page_${String(n).padStart(2,'0')}.jpg`; }
+const canvas = document.getElementById('canvas');
+const track  = document.getElementById('track');
 
+function pageSrc(n){ return `pages/page_${String(n).padStart(2,'0')}.jpg`; }
+function preload(n){ const im = new Image(); im.src = pageSrc(n); }
+
+/* HOME GRID */
 const grid = document.getElementById('grid');
 projects.forEach((p,i)=>{
   const card = document.createElement('button');
@@ -251,35 +272,54 @@ projects.forEach((p,i)=>{
   card.onclick = () => openProject(i);
   card.innerHTML = `
     <div class="frame"><img class="thumb" decoding="async" alt="${p.title}"></div>
-    <div class="card-meta"><b>${String(i+1).padStart(2,'0')}</b><span>${p.year}</span></div>
+    <div class="card-meta">${String(i+1).padStart(2,'0')}</div>
   `;
   grid.appendChild(card);
   const t = card.querySelector('.thumb');
   t.src = (window.COVERS && COVERS[p.cover]) ? COVERS[p.cover] : pageSrc(p.cover);
 });
 
-function preload(n){ const im = new Image(); im.src = pageSrc(n); }
-
+/* VIEWER */
 function openProject(i){
   currentProject = i; currentPage = 0;
+  buildTrack();
   document.getElementById('home').classList.add('hidden');
   document.getElementById('viewer').classList.add('active');
-  renderPage();
-  projects[i].pages.forEach(preload);   // load the whole project in the background
+  render();
+  projects[i].pages.forEach(preload);
 }
 function goHome(){
   document.getElementById('viewer').classList.remove('active');
   document.getElementById('home').classList.remove('hidden');
 }
 
-function renderPage(){
+function buildTrack(){
   const p = projects[currentProject];
-  const page = p.pages[currentPage];
-  const img = document.getElementById('pageImg');
+  track.innerHTML = p.pages.map((n,idx)=>
+    `<div class="slide" data-idx="${idx}"><img decoding="async" alt="${p.title}, page ${idx+1}"></div>`
+  ).join('');
+  [...track.children].forEach((s,idx)=>{
+    const n = p.pages[idx];
+    const img = s.querySelector('img');
+    if(window.LQIP && LQIP[n]) img.style.backgroundImage = `url(${LQIP[n]})`;
+    img.src = pageSrc(n);
+  });
+}
 
-  img.style.backgroundImage = (window.LQIP && LQIP[page]) ? `url(${LQIP[page]})` : 'none';
-  img.alt = `${p.title}, page ${currentPage+1}`;
-  img.src = pageSrc(page);
+function layout(){
+  const cw = canvas.clientWidth;
+  const sw = Math.round(cw * 0.80);   // current page width
+  const gap = Math.round(cw * 0.045);
+  const leftPad = Math.round(cw * 0.05);
+  [...track.children].forEach(s => s.style.width = sw + 'px');
+  track.style.gap = gap + 'px';
+  track.style.transform = `translateX(${leftPad - currentPage*(sw+gap)}px)`;
+}
+
+function render(){
+  const p = projects[currentProject];
+  [...track.children].forEach((s,idx)=> s.classList.toggle('current', idx===currentPage));
+  layout();
 
   document.getElementById('projectNum').textContent = String(currentProject+1).padStart(2,'0') + ' / ' + String(projects.length).padStart(2,'0');
   document.getElementById('projectTitle').textContent = p.title;
@@ -296,14 +336,24 @@ function renderPage(){
 function move(d){
   const p = projects[currentProject];
   currentPage = Math.max(0, Math.min(p.pages.length - 1, currentPage + d));
-  renderPage();
+  render();
 }
 function moveProject(d){
   const next = currentProject + d;
   if(next < 0 || next >= projects.length) return;
-  currentProject = next; currentPage = 0; renderPage();
+  currentProject = next; currentPage = 0;
+  buildTrack(); render();
   projects[currentProject].pages.forEach(preload);
 }
+
+/* click a slide: the current one advances; a peeking one jumps into focus */
+canvas.addEventListener('click', e=>{
+  const slide = e.target.closest('.slide');
+  if(!slide) return;
+  const idx = +slide.dataset.idx;
+  if(idx === currentPage) move(1);
+  else { currentPage = idx; render(); }
+});
 
 document.addEventListener('keydown', e => {
   if(!document.getElementById('viewer').classList.contains('active')) return;
@@ -313,7 +363,6 @@ document.addEventListener('keydown', e => {
 });
 
 let touchX = null;
-const canvas = document.querySelector('.canvas');
 canvas.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, {passive:true});
 canvas.addEventListener('touchend', e => {
   if(touchX === null) return;
@@ -321,6 +370,10 @@ canvas.addEventListener('touchend', e => {
   if(Math.abs(dx) > 45) move(dx < 0 ? 1 : -1);
   touchX = null;
 }, {passive:true});
+
+window.addEventListener('resize', ()=>{
+  if(document.getElementById('viewer').classList.contains('active')) layout();
+});
 </script>
 
 </body>
